@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Hub Music OSR</title>
+    <title>The Hub Music OSR - By Robinson Chagas</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #1DB954; /* Verde Spotify */
+            --primary: #1DB954;
             --bg: #000000;
             --card: #121212;
             --input: #282828;
@@ -20,219 +20,92 @@
             color: var(--text);
             font-family: 'Inter', sans-serif;
             margin: 0;
-            padding: 0;
-            padding-bottom: 90px; /* Espacio para el menú inferior */
+            padding-bottom: 100px;
         }
 
-        /* HEADER */
+        /* HEADER & BRANDING */
         .header {
             text-align: center;
-            padding: 25px 20px 15px 20px;
-            background: linear-gradient(to bottom, #1db95422, transparent);
+            padding: 35px 20px 15px;
+            background: linear-gradient(to bottom, #1db95415, transparent);
         }
 
         .logo-osr {
-            width: 50px;
-            filter: drop-shadow(0 0 8px var(--primary));
+            width: 55px;
+            filter: drop-shadow(0 0 10px var(--primary));
             margin-bottom: 10px;
         }
 
         h1 {
-            font-size: 18px;
+            font-size: 20px;
             font-weight: 900;
             margin: 0;
             letter-spacing: 1px;
             color: var(--primary);
         }
 
-        .container {
-            padding: 0 20px;
-            max-width: 500px;
-            margin: auto;
+        .author-tag {
+            font-size: 10px;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-top: 5px;
+            display: block;
+            font-weight: 600;
         }
 
-        /* NAVEGACIÓN POR PESTAÑAS */
-        .page { display: none; animation: fadeIn 0.3s ease; }
+        .container { padding: 0 20px; max-width: 500px; margin: auto; }
+
+        /* NAVEGACIÓN ENTRE PÁGINAS */
+        .page { display: none; animation: fadeIn 0.4s ease forwards; }
         .active-page { display: block; }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* TARJETA PRINCIPAL */
-        .main-card {
-            background: var(--card);
-            padding: 20px;
-            border-radius: 20px;
-            border: 1px solid #222;
-        }
-
-        .group {
-            text-align: left;
-            margin-bottom: 15px;
-            position: relative;
-        }
-
-        label {
-            font-size: 10px;
-            font-weight: 700;
-            text-transform: uppercase;
-            color: var(--text-dim);
-            display: block;
-            margin-bottom: 8px;
-            letter-spacing: 1px;
-        }
-
-        input {
-            width: 100%;
-            background: var(--input);
-            border: 1px solid transparent;
-            padding: 15px;
-            border-radius: 12px;
-            color: white;
-            font-size: 15px;
-            box-sizing: border-box;
-            transition: 0.3s;
-        }
-
-        input:focus {
-            outline: none;
-            border-color: var(--primary);
-            background: #333;
-        }
+        /* ESTILO DE TARJETAS Y FORMULARIOS */
+        .main-card { background: var(--card); padding: 25px; border-radius: 24px; border: 1px solid #222; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        .group { text-align: left; margin-bottom: 18px; position: relative; }
+        label { font-size: 10px; font-weight: 700; color: var(--text-dim); text-transform: uppercase; display: block; margin-bottom: 8px; letter-spacing: 1px; }
+        
+        input { width: 100%; background: var(--input); border: 1px solid transparent; padding: 15px; border-radius: 12px; color: white; font-size: 15px; box-sizing: border-box; transition: 0.3s; }
+        input:focus { outline: none; border-color: var(--primary); background: #333; }
 
         /* RESULTADOS DEL BUSCADOR */
         #search-results {
-            background: #1c1c1c;
-            border-radius: 12px;
-            margin-top: 5px;
-            max-height: 300px;
-            overflow-y: auto;
-            border: 1px solid #333;
-            display: none;
-            position: absolute;
-            width: 100%;
-            z-index: 100;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.7);
+            background: #1c1c1c; border-radius: 12px; margin-top: 5px; max-height: 280px; overflow-y: auto;
+            border: 1px solid #333; display: none; position: absolute; width: 100%; z-index: 100; box-shadow: 0 10px 40px rgba(0,0,0,0.8);
         }
-
-        .result-item {
-            display: flex;
-            align-items: center;
-            padding: 12px;
-            border-bottom: 1px solid #282828;
-            cursor: pointer;
-        }
-
+        .result-item { display: flex; align-items: center; padding: 12px; border-bottom: 1px solid #282828; cursor: pointer; transition: 0.2s; }
         .result-item:hover { background: #282828; }
+        .result-item img { width: 55px; height: 40px; border-radius: 6px; margin-right: 12px; object-fit: cover; }
+        .result-info b { font-size: 13px; display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-        .result-item img {
-            width: 55px;
-            height: 40px;
-            border-radius: 4px;
-            margin-right: 12px;
-            object-fit: cover;
-        }
-
-        .result-info b {
-            font-size: 13px;
-            display: block;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .result-info span {
+        /* TÉRMINOS Y CONDICIONES */
+        .terms-box {
             font-size: 11px;
-            color: var(--text-dim);
-        }
-
-        /* VISTA PREVIA SELECCIONADA */
-        #selection-preview {
-            display: none;
-            margin-top: 15px;
-            padding: 10px;
-            background: #1db95411;
-            border-radius: 12px;
-            border: 1px dashed var(--primary);
-        }
-
-        #selection-preview img {
-            width: 100%;
-            border-radius: 8px;
-            margin-bottom: 8px;
-        }
-
-        /* BOTONES */
-        .btn-send {
-            background: var(--primary);
-            color: black;
-            border: none;
-            padding: 16px;
-            border-radius: 50px;
-            width: 100%;
-            font-weight: 800;
-            font-size: 16px;
-            cursor: pointer;
-            margin-top: 10px;
-            transition: 0.2s;
-        }
-
-        .btn-send:active { transform: scale(0.95); }
-
-        /* ESTILO DE LA LISTA (QUEUE) */
-        .list-item {
-            display: flex;
-            align-items: center;
-            background: var(--card);
-            padding: 12px;
-            border-radius: 15px;
-            margin-bottom: 10px;
-            border: 1px solid #222;
-        }
-
-        .list-item img {
-            width: 50px;
-            height: 50px;
-            border-radius: 8px;
-            margin-right: 15px;
-            object-fit: cover;
-        }
-
-        .list-info { flex: 1; overflow: hidden; }
-        .list-info b { font-size: 13px; display: block; color: var(--primary); margin-bottom: 2px; }
-        .list-info span { font-size: 12px; color: white; display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .list-user { font-size: 10px; color: var(--text-dim); text-transform: uppercase; margin-top: 4px; display: block; }
-
-        /* MENÚ INFERIOR (TIPO APP) */
-        .nav-bar {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: #000;
-            border-top: 1px solid #222;
-            display: flex;
-            justify-content: space-around;
-            padding: 15px 0;
-            z-index: 1000;
-        }
-
-        .nav-btn {
-            background: none;
-            border: none;
             color: #555;
-            font-weight: 800;
-            font-size: 11px;
-            cursor: pointer;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 5px;
+            text-align: left;
+            margin-top: 25px;
+            padding: 15px;
+            background: rgba(255,255,255,0.02);
+            border-radius: 12px;
+            border: 1px solid #111;
+            line-height: 1.5;
         }
 
+        /* FILA DE REPRODUCCIÓN */
+        .list-item { display: flex; align-items: center; background: var(--card); padding: 12px; border-radius: 16px; margin-bottom: 12px; border: 1px solid #222; animation: fadeIn 0.3s ease; }
+        .list-item img { width: 50px; height: 50px; border-radius: 10px; margin-right: 15px; object-fit: cover; }
+        .list-info b { font-size: 13px; display: block; color: var(--primary); margin-bottom: 2px; }
+        .list-info span { font-size: 12px; color: white; display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 200px; }
+
+        /* NAV BAR INFERIOR */
+        .nav-bar { position: fixed; bottom: 0; left: 0; right: 0; background: rgba(0,0,0,0.95); backdrop-filter: blur(10px); border-top: 1px solid #222; display: flex; justify-content: space-around; padding: 15px 0 25px; z-index: 1000; }
+        .nav-btn { background: none; border: none; color: #555; font-weight: 800; font-size: 11px; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 5px; transition: 0.3s; }
         .nav-btn.active-nav { color: var(--primary); }
+
+        .btn-send { background: var(--primary); color: black; border: none; padding: 18px; border-radius: 50px; width: 100%; font-weight: 900; font-size: 16px; margin-top: 10px; cursor: pointer; transition: 0.3s; }
+        .btn-send:active { transform: scale(0.96); }
     </style>
 </head>
 <body>
@@ -240,6 +113,7 @@
     <div class="header">
         <img src="logo-osr.png" class="logo-osr">
         <h1>THE HUB MUSIC OSR</h1>
+        <span class="author-tag">Created by Robinson Chagas</span>
     </div>
 
     <div class="container">
@@ -247,27 +121,31 @@
         <div id="page-pedir" class="page active-page">
             <div class="main-card">
                 <div class="group">
-                    <label>👤 Tu Nombre</label>
+                    <label>👤 Tu Nombre o Apodo</label>
                     <input type="text" id="username" placeholder="Escribe tu nombre...">
                 </div>
-
                 <div class="group">
                     <label>🔍 Buscar Canción</label>
                     <input type="text" id="search-input" placeholder="Artista, canción..." oninput="debounceSearch()">
                     <div id="search-results"></div>
                 </div>
-
-                <div id="selection-preview">
-                    <img id="selected-thumb" src="">
-                    <b id="selected-title" style="font-size: 12px;"></b>
+                <div id="selection-preview" style="display:none; margin-bottom: 20px;">
+                    <img id="selected-thumb" src="" style="width:100%; border-radius:15px; box-shadow: 0 5px 15px rgba(0,0,0,0.5);">
+                    <b id="selected-title" style="font-size:13px; color:var(--primary); text-align: left; display: block; margin-top: 8px;"></b>
                 </div>
+                <button class="btn-send" onclick="sendToFirebase()">ENVIAR A LA FILA</button>
+            </div>
 
-                <button class="btn-send" onclick="sendToFirebase()">ENVIAR AL PARLANTE</button>
+            <div class="terms-box">
+                <b style="color: #888;">Términos y Condiciones:</b><br>
+                • No se permite música con contenido ofensivo o explícito extremo.<br>
+                • El administrador puede saltar temas por tiempo o convivencia.<br>
+                • Sistema de uso libre y responsable para el equipo OSR.
             </div>
         </div>
 
         <div id="page-lista" class="page">
-            <h2 style="font-size: 14px; letter-spacing: 1px; color: var(--text-dim); margin-bottom: 20px;">FILA DE REPRODUCCIÓN</h2>
+            <h2 style="font-size: 14px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 20px;">Próximas en sonar</h2>
             <div id="public-queue-container">
                 </div>
         </div>
@@ -276,10 +154,10 @@
 
     <div class="nav-bar">
         <button class="nav-btn active-nav" id="nav-pedir" onclick="changePage('pedir')">
-            <span>➕</span> PEDIR
+            <span style="font-size: 18px;">➕</span> PEDIR
         </button>
         <button class="nav-btn" id="nav-lista" onclick="changePage('lista')">
-            <span>🗒️</span> VER LISTA
+            <span style="font-size: 18px;">🗒️</span> FILA
         </button>
     </div>
 
@@ -301,14 +179,14 @@
         let selectedVideoData = null;
         let searchTimer;
 
-        // Recuperar nombre guardado
+        // Auto-completar nombre guardado
         document.getElementById('username').value = localStorage.getItem('osr_user_name') || "";
 
-        // LÓGICA DE NAVEGACIÓN
+        // NAVEGACIÓN
         function changePage(pageId) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page'));
             document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active-nav'));
-
+            
             if(pageId === 'pedir') {
                 document.getElementById('page-pedir').classList.add('active-page');
                 document.getElementById('nav-pedir').classList.add('active-nav');
@@ -319,7 +197,7 @@
             }
         }
 
-        // BUSCADOR EN TIEMPO REAL
+        // BUSCADOR
         function debounceSearch() {
             clearTimeout(searchTimer);
             searchTimer = setTimeout(performSearch, 500);
@@ -328,74 +206,51 @@
         async function performSearch() {
             const query = document.getElementById('search-input').value.trim();
             const resultsDiv = document.getElementById('search-results');
-            
             if (query.length < 3) { resultsDiv.style.display = "none"; return; }
-
             try {
-                const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=6&q=${encodeURIComponent(query)}&type=video&key=${YT_API_KEY}`;
+                const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=5&q=${encodeURIComponent(query)}&type=video&key=${YT_API_KEY}`;
                 const response = await fetch(url);
                 const data = await response.json();
-                
-                resultsDiv.innerHTML = "";
-                resultsDiv.style.display = "block";
-
+                resultsDiv.innerHTML = ""; resultsDiv.style.display = "block";
                 data.items.forEach(item => {
-                    const video = item.snippet;
+                    const v = item.snippet;
                     const div = document.createElement('div');
                     div.className = 'result-item';
-                    div.innerHTML = `
-                        <img src="${video.thumbnails.default.url}">
-                        <div class="result-info">
-                            <b>${video.title}</b>
-                            <span>${video.channelTitle}</span>
-                        </div>
-                    `;
+                    div.innerHTML = `<img src="${v.thumbnails.default.url}"><div class="result-info"><b>${v.title}</b></div>`;
                     div.onclick = () => {
-                        selectedVideoData = {
-                            id: item.id.videoId,
-                            title: video.title,
-                            thumb: video.thumbnails.high.url
-                        };
-                        document.getElementById('selected-thumb').src = selectedVideoData.thumb;
-                        document.getElementById('selected-title').innerText = selectedVideoData.title;
+                        selectedVideoData = { id: item.id.videoId, title: v.title };
+                        document.getElementById('selected-thumb').src = v.thumbnails.high.url;
+                        document.getElementById('selected-title').innerText = v.title;
                         document.getElementById('selection-preview').style.display = "block";
-                        document.getElementById('search-input').value = video.title;
+                        document.getElementById('search-input').value = v.title;
                         resultsDiv.style.display = "none";
                     };
                     resultsDiv.appendChild(div);
                 });
-            } catch (error) { console.error("Error API YT:", error); }
+            } catch (e) { console.error(e); }
         }
 
-        // ENVIAR A FIREBASE
+        // ENVIAR
         function sendToFirebase() {
             const user = document.getElementById('username').value.trim();
-            if (!user || !selectedVideoData) return alert("Ingresa tu nombre y elige una canción.");
-
+            if (!user || !selectedVideoData) return alert("Por favor, pon tu nombre y elige una canción.");
             localStorage.setItem('osr_user_name', user);
-
             db.ref('osr_lista').push({
-                user: user,
-                id: selectedVideoData.id,
-                title: selectedVideoData.title,
+                user: user, id: selectedVideoData.id, title: selectedVideoData.title,
                 time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}),
                 estado: null
-            }).then(() => {
-                alert("🎶 ¡Enviado! Tu música está en fila.");
+            }).then(() => { 
+                alert("🎶 ¡Enviado correctamente!"); 
                 location.reload(); 
             });
         }
 
-        // ESCUCHAR LA LISTA PÚBLICA
+        // FILA EN TIEMPO REAL
         function listenToQueue() {
             const container = document.getElementById('public-queue-container');
             db.ref('osr_lista').on('value', (snap) => {
                 container.innerHTML = "";
-                if (!snap.exists()) {
-                    container.innerHTML = "<p style='text-align:center; color:#555;'>No hay música en la fila...</p>";
-                    return;
-                }
-
+                if (!snap.exists()) { container.innerHTML = "<p style='text-align:center; color:#555;'>No hay canciones en fila.</p>"; return; }
                 snap.forEach(child => {
                     const data = child.val();
                     if (data.estado !== 'reproducida') {
@@ -404,9 +259,9 @@
                         div.innerHTML = `
                             <img src="https://img.youtube.com/vi/${data.id}/mqdefault.jpg">
                             <div class="list-info">
-                                <b>EN FILA</b>
-                                <span>${data.title || 'Música de YouTube'}</span>
-                                <small class="list-user">Pedido por: ${data.user}</small>
+                                <b>EN ESPERA</b>
+                                <span>${data.title}</span>
+                                <small style="color:#666; font-size:10px; text-transform:uppercase;">POR: ${data.user}</small>
                             </div>
                         `;
                         container.appendChild(div);
