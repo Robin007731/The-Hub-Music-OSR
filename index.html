@@ -3,15 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Hub Music OSR - Enviar Canción</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <title>The Hub Music OSR</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #1DB954;
+            --primary: #1DB954; /* Verde Spotify */
             --bg: #000000;
             --card: #121212;
             --input: #282828;
             --text: #ffffff;
+            --text-dim: #b3b3b3;
         }
 
         body {
@@ -19,37 +20,52 @@
             color: var(--text);
             font-family: 'Inter', sans-serif;
             margin: 0;
-            padding: 15px;
-            display: flex;
-            justify-content: center;
+            padding: 0;
+            padding-bottom: 90px; /* Espacio para el menú inferior */
         }
 
-        .app-container {
-            width: 100%;
-            max-width: 450px;
+        /* HEADER */
+        .header {
             text-align: center;
+            padding: 25px 20px 15px 20px;
+            background: linear-gradient(to bottom, #1db95422, transparent);
         }
 
         .logo-osr {
-            width: 80px;
+            width: 50px;
+            filter: drop-shadow(0 0 8px var(--primary));
             margin-bottom: 10px;
-            filter: drop-shadow(0 0 10px var(--primary));
         }
 
         h1 {
-            font-size: 20px;
+            font-size: 18px;
             font-weight: 900;
-            margin-bottom: 20px;
-            letter-spacing: -1px;
+            margin: 0;
+            letter-spacing: 1px;
             color: var(--primary);
         }
 
+        .container {
+            padding: 0 20px;
+            max-width: 500px;
+            margin: auto;
+        }
+
+        /* NAVEGACIÓN POR PESTAÑAS */
+        .page { display: none; animation: fadeIn 0.3s ease; }
+        .active-page { display: block; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* TARJETA PRINCIPAL */
         .main-card {
             background: var(--card);
             padding: 20px;
-            border-radius: 24px;
+            border-radius: 20px;
             border: 1px solid #222;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.8);
         }
 
         .group {
@@ -62,9 +78,9 @@
             font-size: 10px;
             font-weight: 700;
             text-transform: uppercase;
-            color: #888;
+            color: var(--text-dim);
             display: block;
-            margin-bottom: 6px;
+            margin-bottom: 8px;
             letter-spacing: 1px;
         }
 
@@ -72,7 +88,7 @@
             width: 100%;
             background: var(--input);
             border: 1px solid transparent;
-            padding: 14px;
+            padding: 15px;
             border-radius: 12px;
             color: white;
             font-size: 15px;
@@ -83,62 +99,72 @@
         input:focus {
             outline: none;
             border-color: var(--primary);
+            background: #333;
         }
 
-        /* PANEL DE SUGERENCIAS FLOTANTE */
+        /* RESULTADOS DEL BUSCADOR */
         #search-results {
             background: #1c1c1c;
             border-radius: 12px;
             margin-top: 5px;
-            max-height: 350px;
+            max-height: 300px;
             overflow-y: auto;
             border: 1px solid #333;
-            display: none; /* Se activa al escribir */
+            display: none;
             position: absolute;
             width: 100%;
             z-index: 100;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.7);
         }
 
         .result-item {
             display: flex;
             align-items: center;
             padding: 12px;
-            cursor: pointer;
             border-bottom: 1px solid #282828;
-            transition: 0.2s;
+            cursor: pointer;
         }
 
         .result-item:hover { background: #282828; }
 
         .result-item img {
-            width: 65px;
-            height: 45px;
-            border-radius: 6px;
+            width: 55px;
+            height: 40px;
+            border-radius: 4px;
             margin-right: 12px;
             object-fit: cover;
         }
 
-        .result-info { flex: 1; overflow: hidden; }
-        .result-info b { font-size: 13px; display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: #fff; }
-        .result-info span { font-size: 11px; color: #888; display: block; }
+        .result-info b {
+            font-size: 13px;
+            display: block;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .result-info span {
+            font-size: 11px;
+            color: var(--text-dim);
+        }
 
         /* VISTA PREVIA SELECCIONADA */
         #selection-preview {
             display: none;
-            margin: 15px 0;
-            padding: 12px;
-            background: rgba(29, 185, 84, 0.05);
-            border-radius: 15px;
+            margin-top: 15px;
+            padding: 10px;
+            background: #1db95411;
+            border-radius: 12px;
             border: 1px dashed var(--primary);
         }
 
         #selection-preview img {
             width: 100%;
-            border-radius: 10px;
+            border-radius: 8px;
             margin-bottom: 8px;
         }
 
+        /* BOTONES */
         .btn-send {
             background: var(--primary);
             color: black;
@@ -149,45 +175,119 @@
             font-weight: 800;
             font-size: 16px;
             cursor: pointer;
-            transition: 0.3s;
             margin-top: 10px;
+            transition: 0.2s;
         }
 
-        .btn-send:active { transform: scale(0.96); }
+        .btn-send:active { transform: scale(0.95); }
+
+        /* ESTILO DE LA LISTA (QUEUE) */
+        .list-item {
+            display: flex;
+            align-items: center;
+            background: var(--card);
+            padding: 12px;
+            border-radius: 15px;
+            margin-bottom: 10px;
+            border: 1px solid #222;
+        }
+
+        .list-item img {
+            width: 50px;
+            height: 50px;
+            border-radius: 8px;
+            margin-right: 15px;
+            object-fit: cover;
+        }
+
+        .list-info { flex: 1; overflow: hidden; }
+        .list-info b { font-size: 13px; display: block; color: var(--primary); margin-bottom: 2px; }
+        .list-info span { font-size: 12px; color: white; display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .list-user { font-size: 10px; color: var(--text-dim); text-transform: uppercase; margin-top: 4px; display: block; }
+
+        /* MENÚ INFERIOR (TIPO APP) */
+        .nav-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: #000;
+            border-top: 1px solid #222;
+            display: flex;
+            justify-content: space-around;
+            padding: 15px 0;
+            z-index: 1000;
+        }
+
+        .nav-btn {
+            background: none;
+            border: none;
+            color: #555;
+            font-weight: 800;
+            font-size: 11px;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .nav-btn.active-nav { color: var(--primary); }
     </style>
 </head>
 <body>
 
-    <div class="app-container">
-        <img src="logo-osr.png" class="logo-osr" alt="Logo">
-        <h1>THE HUB OSR</h1>
+    <div class="header">
+        <img src="logo-osr.png" class="logo-osr">
+        <h1>THE HUB MUSIC OSR</h1>
+    </div>
 
-        <div class="main-card">
-            <div class="group">
-                <label>Tu Nombre</label>
-                <input type="text" id="username" placeholder="¿Quién eres?">
+    <div class="container">
+        
+        <div id="page-pedir" class="page active-page">
+            <div class="main-card">
+                <div class="group">
+                    <label>👤 Tu Nombre</label>
+                    <input type="text" id="username" placeholder="Escribe tu nombre...">
+                </div>
+
+                <div class="group">
+                    <label>🔍 Buscar Canción</label>
+                    <input type="text" id="search-input" placeholder="Artista, canción..." oninput="debounceSearch()">
+                    <div id="search-results"></div>
+                </div>
+
+                <div id="selection-preview">
+                    <img id="selected-thumb" src="">
+                    <b id="selected-title" style="font-size: 12px;"></b>
+                </div>
+
+                <button class="btn-send" onclick="sendToFirebase()">ENVIAR AL PARLANTE</button>
             </div>
-
-            <div class="group">
-                <label>Buscar Música</label>
-                <input type="text" id="search-input" placeholder="Escribe canción o artista..." oninput="debounceSearch()">
-                <div id="search-results"></div>
-            </div>
-
-            <div id="selection-preview">
-                <span style="font-size: 10px; color: var(--primary); font-weight: 800; display: block; margin-bottom: 5px;">SELECCIONADO:</span>
-                <img id="selected-thumb" src="">
-                <b id="selected-title" style="font-size: 13px; display: block;"></b>
-            </div>
-
-            <button class="btn-send" onclick="sendToHub()">ENVIAR A LA FILA</button>
         </div>
+
+        <div id="page-lista" class="page">
+            <h2 style="font-size: 14px; letter-spacing: 1px; color: var(--text-dim); margin-bottom: 20px;">FILA DE REPRODUCCIÓN</h2>
+            <div id="public-queue-container">
+                </div>
+        </div>
+
+    </div>
+
+    <div class="nav-bar">
+        <button class="nav-btn active-nav" id="nav-pedir" onclick="changePage('pedir')">
+            <span>➕</span> PEDIR
+        </button>
+        <button class="nav-btn" id="nav-lista" onclick="changePage('lista')">
+            <span>🗒️</span> VER LISTA
+        </button>
     </div>
 
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
 
     <script>
+        // CONFIGURACIÓN FIREBASE
         const firebaseConfig = {
             apiKey: "AIzaSyCk4wgJ2LPicyWnO8XXPQxqu49dtqM8jz4",
             databaseURL: "https://the-hub-music-osr-default-rtdb.firebaseio.com",
@@ -196,35 +296,48 @@
         };
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
-        
         const YT_API_KEY = "AIzaSyBiRDaFPzpNrmg_SHvAZqtBsGXqHXkgK5k";
-        let selectedId = null;
-        let timer; // Para no saturar la API
 
-        document.getElementById('username').value = localStorage.getItem('osr_user') || "";
+        let selectedVideoData = null;
+        let searchTimer;
 
-        // Función "Debounce" para esperar a que el usuario deje de escribir un poco
-        function debounceSearch() {
-            clearTimeout(timer);
-            timer = setTimeout(searchYT, 400); // Busca 400ms después de que dejó de escribir
+        // Recuperar nombre guardado
+        document.getElementById('username').value = localStorage.getItem('osr_user_name') || "";
+
+        // LÓGICA DE NAVEGACIÓN
+        function changePage(pageId) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page'));
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active-nav'));
+
+            if(pageId === 'pedir') {
+                document.getElementById('page-pedir').classList.add('active-page');
+                document.getElementById('nav-pedir').classList.add('active-nav');
+            } else {
+                document.getElementById('page-lista').classList.add('active-page');
+                document.getElementById('nav-lista').classList.add('active-nav');
+                listenToQueue();
+            }
         }
 
-        async function searchYT() {
+        // BUSCADOR EN TIEMPO REAL
+        function debounceSearch() {
+            clearTimeout(searchTimer);
+            searchTimer = setTimeout(performSearch, 500);
+        }
+
+        async function performSearch() {
             const query = document.getElementById('search-input').value.trim();
-            const resDiv = document.getElementById('search-results');
+            const resultsDiv = document.getElementById('search-results');
             
-            if (query.length < 3) {
-                resDiv.style.display = "none";
-                return;
-            }
+            if (query.length < 3) { resultsDiv.style.display = "none"; return; }
 
             try {
                 const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=6&q=${encodeURIComponent(query)}&type=video&key=${YT_API_KEY}`;
                 const response = await fetch(url);
                 const data = await response.json();
                 
-                resDiv.innerHTML = "";
-                resDiv.style.display = "block";
+                resultsDiv.innerHTML = "";
+                resultsDiv.style.display = "block";
 
                 data.items.forEach(item => {
                     const video = item.snippet;
@@ -238,42 +351,69 @@
                         </div>
                     `;
                     div.onclick = () => {
-                        selectedId = item.id.videoId;
-                        document.getElementById('selected-thumb').src = video.thumbnails.high.url;
-                        document.getElementById('selected-title').innerText = video.title;
+                        selectedVideoData = {
+                            id: item.id.videoId,
+                            title: video.title,
+                            thumb: video.thumbnails.high.url
+                        };
+                        document.getElementById('selected-thumb').src = selectedVideoData.thumb;
+                        document.getElementById('selected-title').innerText = selectedVideoData.title;
                         document.getElementById('selection-preview').style.display = "block";
                         document.getElementById('search-input').value = video.title;
-                        resDiv.style.display = "none";
+                        resultsDiv.style.display = "none";
                     };
-                    resDiv.appendChild(div);
+                    resultsDiv.appendChild(div);
                 });
-            } catch (e) {
-                console.error("Error:", e);
-            }
+            } catch (error) { console.error("Error API YT:", error); }
         }
 
-        function sendToHub() {
+        // ENVIAR A FIREBASE
+        function sendToFirebase() {
             const user = document.getElementById('username').value.trim();
-            if (!user || !selectedId) return alert("Pon tu nombre y selecciona una música.");
+            if (!user || !selectedVideoData) return alert("Ingresa tu nombre y elige una canción.");
 
-            localStorage.setItem('osr_user', user);
+            localStorage.setItem('osr_user_name', user);
+
             db.ref('osr_lista').push({
                 user: user,
-                id: selectedId,
+                id: selectedVideoData.id,
+                title: selectedVideoData.title,
                 time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}),
                 estado: null
             }).then(() => {
                 alert("🎶 ¡Enviado! Tu música está en fila.");
-                location.reload();
+                location.reload(); 
             });
         }
 
-        // Cerrar resultados si se toca fuera
-        document.addEventListener('click', (e) => {
-            if (!e.target.closest('.search-container')) {
-                document.getElementById('search-results').style.display = "none";
-            }
-        });
+        // ESCUCHAR LA LISTA PÚBLICA
+        function listenToQueue() {
+            const container = document.getElementById('public-queue-container');
+            db.ref('osr_lista').on('value', (snap) => {
+                container.innerHTML = "";
+                if (!snap.exists()) {
+                    container.innerHTML = "<p style='text-align:center; color:#555;'>No hay música en la fila...</p>";
+                    return;
+                }
+
+                snap.forEach(child => {
+                    const data = child.val();
+                    if (data.estado !== 'reproducida') {
+                        const div = document.createElement('div');
+                        div.className = 'list-item';
+                        div.innerHTML = `
+                            <img src="https://img.youtube.com/vi/${data.id}/mqdefault.jpg">
+                            <div class="list-info">
+                                <b>EN FILA</b>
+                                <span>${data.title || 'Música de YouTube'}</span>
+                                <small class="list-user">Pedido por: ${data.user}</small>
+                            </div>
+                        `;
+                        container.appendChild(div);
+                    }
+                });
+            });
+        }
     </script>
 </body>
 </html>
