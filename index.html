@@ -85,15 +85,15 @@
             border-color: var(--primary);
         }
 
-        /* RESULTADOS DEL BUSCADOR */
+        /* PANEL DE SUGERENCIAS FLOTANTE */
         #search-results {
             background: #1c1c1c;
             border-radius: 12px;
             margin-top: 5px;
-            max-height: 280px;
+            max-height: 350px;
             overflow-y: auto;
             border: 1px solid #333;
-            display: none;
+            display: none; /* Se activa al escribir */
             position: absolute;
             width: 100%;
             z-index: 100;
@@ -103,7 +103,7 @@
         .result-item {
             display: flex;
             align-items: center;
-            padding: 10px;
+            padding: 12px;
             cursor: pointer;
             border-bottom: 1px solid #282828;
             transition: 0.2s;
@@ -112,16 +112,16 @@
         .result-item:hover { background: #282828; }
 
         .result-item img {
-            width: 55px;
-            height: 40px;
+            width: 65px;
+            height: 45px;
             border-radius: 6px;
             margin-right: 12px;
             object-fit: cover;
         }
 
         .result-info { flex: 1; overflow: hidden; }
-        .result-info b { font-size: 13px; display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .result-info span { font-size: 11px; color: #888; }
+        .result-info b { font-size: 13px; display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: #fff; }
+        .result-info span { font-size: 11px; color: #888; display: block; }
 
         /* VISTA PREVIA SELECCIONADA */
         #selection-preview {
@@ -169,17 +169,18 @@
             </div>
 
             <div class="group">
-                <label>Buscar Canción</label>
-                <input type="text" id="search-input" placeholder="Escribe artista o canción..." oninput="searchYT()">
+                <label>Buscar Música</label>
+                <input type="text" id="search-input" placeholder="Escribe canción o artista..." oninput="debounceSearch()">
                 <div id="search-results"></div>
             </div>
 
             <div id="selection-preview">
+                <span style="font-size: 10px; color: var(--primary); font-weight: 800; display: block; margin-bottom: 5px;">SELECCIONADO:</span>
                 <img id="selected-thumb" src="">
                 <b id="selected-title" style="font-size: 13px; display: block;"></b>
             </div>
 
-            <button class="btn-send" onclick="sendToHub()">ENVIAR AHORA</button>
+            <button class="btn-send" onclick="sendToHub()">ENVIAR A LA FILA</button>
         </div>
     </div>
 
@@ -187,7 +188,6 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
 
     <script>
-        // Configuración de tu Firebase
         const firebaseConfig = {
             apiKey: "AIzaSyCk4wgJ2LPicyWnO8XXPQxqu49dtqM8jz4",
             databaseURL: "https://the-hub-music-osr-default-rtdb.firebaseio.com",
@@ -197,17 +197,20 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
         
-        // Tu Clave de YouTube API
         const YT_API_KEY = "AIzaSyBiRDaFPzpNrmg_SHvAZqtBsGXqHXkgK5k";
-
         let selectedId = null;
-        
-        // Recordar nombre del usuario
+        let timer; // Para no saturar la API
+
         document.getElementById('username').value = localStorage.getItem('osr_user') || "";
 
-        // Lógica del Buscador
+        // Función "Debounce" para esperar a que el usuario deje de escribir un poco
+        function debounceSearch() {
+            clearTimeout(timer);
+            timer = setTimeout(searchYT, 400); // Busca 400ms después de que dejó de escribir
+        }
+
         async function searchYT() {
-            const query = document.getElementById('search-input').value;
+            const query = document.getElementById('search-input').value.trim();
             const resDiv = document.getElementById('search-results');
             
             if (query.length < 3) {
@@ -216,7 +219,7 @@
             }
 
             try {
-                const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=5&q=${encodeURIComponent(query)}&type=video&key=${YT_API_KEY}`;
+                const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=6&q=${encodeURIComponent(query)}&type=video&key=${YT_API_KEY}`;
                 const response = await fetch(url);
                 const data = await response.json();
                 
@@ -245,28 +248,32 @@
                     resDiv.appendChild(div);
                 });
             } catch (e) {
-                console.error("Error en búsqueda:", e);
+                console.error("Error:", e);
             }
         }
 
-        // Enviar a Firebase
         function sendToHub() {
             const user = document.getElementById('username').value.trim();
-            if (!user) return alert("Por favor, ingresa tu nombre.");
-            if (!selectedId) return alert("Primero selecciona una canción de la lista.");
+            if (!user || !selectedId) return alert("Pon tu nombre y selecciona una música.");
 
             localStorage.setItem('osr_user', user);
-
             db.ref('osr_lista').push({
                 user: user,
                 id: selectedId,
                 time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}),
-                estado: null // Pendiente
+                estado: null
             }).then(() => {
-                alert("🎶 ¡Canción enviada correctamente!");
-                location.reload(); // Limpiar para el siguiente
+                alert("🎶 ¡Enviado! Tu música está en fila.");
+                location.reload();
             });
         }
+
+        // Cerrar resultados si se toca fuera
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.search-container')) {
+                document.getElementById('search-results').style.display = "none";
+            }
+        });
     </script>
 </body>
 </html>
