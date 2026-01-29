@@ -3,164 +3,183 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Hub Music OSR - Enviar</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800&display=swap" rel="stylesheet">
+    <title>The Hub Music OSR - Enviar Canción</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
         :root {
-            --spotify-green: #1DB954;
-            --bg-dark: #000000;
-            --card-bg: #181818;
-            --input-bg: #282828;
-            --text-main: #ffffff;
-            --text-dim: #b3b3b3;
+            --primary: #1DB954;
+            --bg: #000000;
+            --card: #121212;
+            --input: #282828;
+            --text: #ffffff;
         }
 
         body {
-            background-color: var(--bg-dark);
-            color: var(--text-main);
+            background: var(--bg);
+            color: var(--text);
             font-family: 'Inter', sans-serif;
             margin: 0;
+            padding: 15px;
             display: flex;
             justify-content: center;
-            align-items: center;
-            min-height: 100vh;
         }
 
         .app-container {
             width: 100%;
-            max-width: 420px;
-            padding: 20px;
-            box-sizing: border-box;
+            max-width: 450px;
             text-align: center;
         }
 
         .logo-osr {
-            width: 110px;
-            height: auto;
+            width: 80px;
             margin-bottom: 10px;
-            filter: drop-shadow(0 0 12px rgba(29, 185, 84, 0.4));
+            filter: drop-shadow(0 0 10px var(--primary));
         }
 
         h1 {
-            font-size: 24px;
-            font-weight: 800;
-            margin-bottom: 30px;
-            letter-spacing: -0.5px;
+            font-size: 20px;
+            font-weight: 900;
+            margin-bottom: 20px;
+            letter-spacing: -1px;
+            color: var(--primary);
         }
 
         .main-card {
-            background: var(--card-bg);
-            padding: 25px;
+            background: var(--card);
+            padding: 20px;
             border-radius: 24px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.7);
-            border: 1px solid rgba(255,255,255,0.05);
+            border: 1px solid #222;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.8);
         }
 
-        .field-group {
+        .group {
             text-align: left;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
+            position: relative;
         }
 
         label {
-            display: block;
-            font-size: 11px;
+            font-size: 10px;
             font-weight: 700;
             text-transform: uppercase;
-            color: var(--spotify-green);
-            margin-bottom: 10px;
-            letter-spacing: 1.2px;
+            color: #888;
+            display: block;
+            margin-bottom: 6px;
+            letter-spacing: 1px;
         }
 
         input {
             width: 100%;
-            background: var(--input-bg);
+            background: var(--input);
             border: 1px solid transparent;
-            padding: 16px;
+            padding: 14px;
             border-radius: 12px;
             color: white;
             font-size: 15px;
             box-sizing: border-box;
-            transition: all 0.3s ease;
+            transition: 0.3s;
         }
 
         input:focus {
             outline: none;
-            border-color: var(--spotify-green);
-            background: #333;
+            border-color: var(--primary);
         }
 
-        /* Contenedor de Previsualización */
-        #preview-section {
+        /* RESULTADOS DEL BUSCADOR */
+        #search-results {
+            background: #1c1c1c;
+            border-radius: 12px;
+            margin-top: 5px;
+            max-height: 280px;
+            overflow-y: auto;
+            border: 1px solid #333;
             display: none;
-            margin-top: 20px;
-            animation: slideIn 0.4s ease-out;
-        }
-
-        #preview-section img {
+            position: absolute;
             width: 100%;
+            z-index: 100;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .result-item {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            cursor: pointer;
+            border-bottom: 1px solid #282828;
+            transition: 0.2s;
+        }
+
+        .result-item:hover { background: #282828; }
+
+        .result-item img {
+            width: 55px;
+            height: 40px;
+            border-radius: 6px;
+            margin-right: 12px;
+            object-fit: cover;
+        }
+
+        .result-info { flex: 1; overflow: hidden; }
+        .result-info b { font-size: 13px; display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .result-info span { font-size: 11px; color: #888; }
+
+        /* VISTA PREVIA SELECCIONADA */
+        #selection-preview {
+            display: none;
+            margin: 15px 0;
+            padding: 12px;
+            background: rgba(29, 185, 84, 0.05);
             border-radius: 15px;
-            border: 2px solid var(--spotify-green);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+            border: 1px dashed var(--primary);
         }
 
-        .preview-label {
-            font-size: 12px;
-            color: var(--text-dim);
+        #selection-preview img {
+            width: 100%;
+            border-radius: 10px;
             margin-bottom: 8px;
-            display: block;
         }
 
-        .btn-submit {
-            background: var(--spotify-green);
+        .btn-send {
+            background: var(--primary);
             color: black;
             border: none;
-            padding: 18px;
+            padding: 16px;
             border-radius: 50px;
             width: 100%;
             font-weight: 800;
             font-size: 16px;
             cursor: pointer;
-            margin-top: 15px;
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            transition: 0.3s;
+            margin-top: 10px;
         }
 
-        .btn-submit:active {
-            transform: scale(0.96);
-        }
-
-        .btn-submit:hover {
-            box-shadow: 0 8px 25px rgba(29, 185, 84, 0.4);
-        }
-
-        @keyframes slideIn {
-            from { opacity: 0; transform: translateY(15px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+        .btn-send:active { transform: scale(0.96); }
     </style>
 </head>
 <body>
 
     <div class="app-container">
-        <img src="logo-osr.png" alt="Logo OSR" class="logo-osr">
-        <h1>The Hub Music OSR</h1>
+        <img src="logo-osr.png" class="logo-osr" alt="Logo">
+        <h1>THE HUB OSR</h1>
 
         <div class="main-card">
-            <div class="field-group">
-                <label>👤 Nombre del Colaborador</label>
-                <input type="text" id="username" placeholder="¿Cómo te llamas?">
+            <div class="group">
+                <label>Tu Nombre</label>
+                <input type="text" id="username" placeholder="¿Quién eres?">
             </div>
 
-            <div class="field-group">
-                <label>🔗 Enlace de YouTube</label>
-                <input type="text" id="url" placeholder="Pega el link aquí..." oninput="handlePreview()">
+            <div class="group">
+                <label>Buscar Canción</label>
+                <input type="text" id="search-input" placeholder="Escribe artista o canción..." oninput="searchYT()">
+                <div id="search-results"></div>
             </div>
 
-            <div id="preview-section">
-                <span class="preview-label">Confirmar Video:</span>
-                <img id="thumbnail" src="">
+            <div id="selection-preview">
+                <img id="selected-thumb" src="">
+                <b id="selected-title" style="font-size: 13px; display: block;"></b>
             </div>
 
-            <button class="btn-submit" onclick="submitSong()">ENVIAR A LA COLA</button>
+            <button class="btn-send" onclick="sendToHub()">ENVIAR AHORA</button>
         </div>
     </div>
 
@@ -171,61 +190,81 @@
         // Configuración de tu Firebase
         const firebaseConfig = {
             apiKey: "AIzaSyCk4wgJ2LPicyWnO8XXPQxqu49dtqM8jz4",
-            authDomain: "the-hub-music-osr.firebaseapp.com",
             databaseURL: "https://the-hub-music-osr-default-rtdb.firebaseio.com",
             projectId: "the-hub-music-osr",
             appId: "1:225954155604:web:cb84739b7d7e769661b1c1"
         };
-        
         firebase.initializeApp(firebaseConfig);
-        const database = firebase.database();
+        const db = firebase.database();
+        
+        // Tu Clave de YouTube API
+        const YT_API_KEY = "AIzaSyBiRDaFPzpNrmg_SHvAZqtBsGXqHXkgK5k";
 
-        // Autocargar el nombre si ya lo usó antes
-        document.getElementById('username').value = localStorage.getItem('osr_user_name') || "";
+        let selectedId = null;
+        
+        // Recordar nombre del usuario
+        document.getElementById('username').value = localStorage.getItem('osr_user') || "";
 
-        function getYouTubeID(url) {
-            const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
-            const match = url.match(regExp);
-            return (match && match[2].length == 11) ? match[2] : null;
-        }
+        // Lógica del Buscador
+        async function searchYT() {
+            const query = document.getElementById('search-input').value;
+            const resDiv = document.getElementById('search-results');
+            
+            if (query.length < 3) {
+                resDiv.style.display = "none";
+                return;
+            }
 
-        function handlePreview() {
-            const url = document.getElementById('url').value;
-            const id = getYouTubeID(url);
-            const previewSection = document.getElementById('preview-section');
-            const thumbImg = document.getElementById('thumbnail');
+            try {
+                const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=5&q=${encodeURIComponent(query)}&type=video&key=${YT_API_KEY}`;
+                const response = await fetch(url);
+                const data = await response.json();
+                
+                resDiv.innerHTML = "";
+                resDiv.style.display = "block";
 
-            if (id) {
-                thumbImg.src = `https://img.youtube.com/vi/${id}/hqdefault.jpg`;
-                previewSection.style.display = "block";
-            } else {
-                previewSection.style.display = "none";
+                data.items.forEach(item => {
+                    const video = item.snippet;
+                    const div = document.createElement('div');
+                    div.className = 'result-item';
+                    div.innerHTML = `
+                        <img src="${video.thumbnails.default.url}">
+                        <div class="result-info">
+                            <b>${video.title}</b>
+                            <span>${video.channelTitle}</span>
+                        </div>
+                    `;
+                    div.onclick = () => {
+                        selectedId = item.id.videoId;
+                        document.getElementById('selected-thumb').src = video.thumbnails.high.url;
+                        document.getElementById('selected-title').innerText = video.title;
+                        document.getElementById('selection-preview').style.display = "block";
+                        document.getElementById('search-input').value = video.title;
+                        resDiv.style.display = "none";
+                    };
+                    resDiv.appendChild(div);
+                });
+            } catch (e) {
+                console.error("Error en búsqueda:", e);
             }
         }
 
-        function submitSong() {
-            const name = document.getElementById('username').value.trim();
-            const url = document.getElementById('url').value.trim();
-            const videoId = getYouTubeID(url);
+        // Enviar a Firebase
+        function sendToHub() {
+            const user = document.getElementById('username').value.trim();
+            if (!user) return alert("Por favor, ingresa tu nombre.");
+            if (!selectedId) return alert("Primero selecciona una canción de la lista.");
 
-            if (!name) return alert("Por favor, ingresa tu nombre.");
-            if (!videoId) return alert("El enlace de YouTube no es válido.");
+            localStorage.setItem('osr_user', user);
 
-            // Guardar nombre localmente para comodidad
-            localStorage.setItem('osr_user_name', name);
-
-            // Enviar a la lista de Firebase
-            database.ref('osr_lista').push({
-                user: name,
-                id: videoId,
-                timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-                status: "pending"
+            db.ref('osr_lista').push({
+                user: user,
+                id: selectedId,
+                time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}),
+                estado: null // Pendiente
             }).then(() => {
-                alert("¡Canción enviada! El Admin la pondrá pronto.");
-                document.getElementById('url').value = "";
-                document.getElementById('preview-section').style.display = "none";
-            }).catch((error) => {
-                alert("Error al enviar: " + error.message);
+                alert("🎶 ¡Canción enviada correctamente!");
+                location.reload(); // Limpiar para el siguiente
             });
         }
     </script>
